@@ -22,8 +22,7 @@ def get_client_ip(
         request_header_order = defs.IPWARE_META_PRECEDENCE_ORDER
 
     for key in request_header_order:
-        value = util.get_request_meta(request, key)
-        if value:
+        if value := util.get_request_meta(request, key):
             ips, ip_count = util.get_ips_from_string(value)
 
             if ip_count < 1:

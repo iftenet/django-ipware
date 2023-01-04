@@ -8,9 +8,7 @@ def cleanup_ip(ip):
     Given ip address string, it cleans it up
     """
     ip = ip.strip().lower()
-    if (ip.startswith('::ffff:')):
-        return ip.replace('::ffff:', '')
-    return ip
+    return ip.replace('::ffff:', '') if (ip.startswith('::ffff:')) else ip
 
 
 def is_valid_ipv4(ip_str):
@@ -74,9 +72,7 @@ def get_request_meta(request, key):
     Given a key, it returns a cleaned up version of the value from request.META, or None
     """
     value = request.META.get(key, request.META.get(key.replace('_', '-'), '')).strip()
-    if value == '':
-        return None
-    return value
+    return None if value == '' else value
 
 
 def get_ips_from_string(ip_str):
@@ -86,14 +82,12 @@ def get_ips_from_string(ip_str):
     ip_list = []
 
     for ip in ip_str.split(','):
-        clean_ip = ip.strip().lower()
-        if clean_ip:
+        if clean_ip := ip.strip().lower():
             ip_list.append(clean_ip)
 
     ip_count = len(ip_list)
-    if ip_count > 0:
-        if is_valid_ip(ip_list[0]) and is_valid_ip(ip_list[-1]):
-            return ip_list, ip_count
+    if ip_count > 0 and is_valid_ip(ip_list[0]) and is_valid_ip(ip_list[-1]):
+        return ip_list, ip_count
 
     return [], 0
 
